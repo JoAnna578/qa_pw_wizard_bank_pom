@@ -32,7 +32,5 @@ test('Assert manager can add new customer', async ({ page }) => {
   await customerListPage.assertLastRowContains(postCode);
   await customerListPage.assertLastRowNoAccountNumber();
 });
-  await customerListPage.assertLastRowNoAccountNumber();
-});
 
 
