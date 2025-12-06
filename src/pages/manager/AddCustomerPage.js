@@ -6,16 +6,14 @@ export class AddCustomerPage {
     this.firstNameInput = page.locator('input[placeholder="First Name"]');
     this.lastNameInput = page.locator('input[placeholder="Last Name"]');
     this.postCodeInput = page.locator('input[placeholder="Post Code"]');
-    this.addButton = page.locator('button[type="submit"]'); 
-    this.alert = page.locator('.alert');
+    this.addButton = page.locator('button[type="submit"]');
   }
 
   async open() {
-    await this.page.goto(
-      '/angularJs-protractor/BankingProject/#/manager/addCust',
-    );
+    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/addCust');
   }
-   async fillFirstName(name) {
+
+  async fillFirstName(name) {
     await this.firstNameInput.fill(name);
   }
 
@@ -28,15 +26,20 @@ export class AddCustomerPage {
   }
 
   async clickAddCustomer() {
+    const dialogPromise = this.page.waitForEvent('dialog');
+
     await this.addButton.click();
+
+    const dialog = await dialogPromise;
+    const message = dialog.message();
+    await dialog.accept();
+
+    return message;
   }
 
-  async assertCustomerAddedAlertVisible() {
-    await expect(this.alert).toBeVisible();
-  }
-  
   async reloadPage() {
     await this.page.reload();
   }
 }
+
 
