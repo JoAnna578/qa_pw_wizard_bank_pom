@@ -23,13 +23,10 @@ export class OpenAccountPage {
 
   async clickProcess() {
     const dialogPromise = this.page.waitForEvent('dialog');
-
     await this.processButton.click();
-
     const dialog = await dialogPromise;
     const message = dialog.message();
     await dialog.accept();
-
     return message; 
   }
 
@@ -41,5 +38,6 @@ export class OpenAccountPage {
     await expect(this.currencySelect).toHaveValue(currency);
   }
 }
+
 
 
