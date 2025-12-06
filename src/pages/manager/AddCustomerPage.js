@@ -26,11 +26,11 @@ export class AddCustomerPage {
   }
 
   async clickAddCustomer() {
-    const dialogPromise = this.page.waitForEvent('dialog');
+    const [dialog] = await Promise.all([
+      this.page.waitForEvent('dialog'),
+      this.addButton.click(),
+    ]);
 
-    await this.addButton.click();
-
-    const dialog = await dialogPromise;
     const message = dialog.message();
     await dialog.accept();
 
@@ -41,5 +41,6 @@ export class AddCustomerPage {
     await this.page.reload();
   }
 }
+
 
 
