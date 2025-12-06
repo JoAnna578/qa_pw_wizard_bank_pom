@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-export class ManagerCustomerListPage {
+export class CustomersListPage {
   constructor(page) {
     this.page = page;
 
@@ -25,29 +25,44 @@ export class ManagerCustomerListPage {
   }
 
   async deleteCustomerByName(firstName, lastName) {
-    const row = this.customerRows.filter({ hasText: `${firstName} ${lastName}` });
+    const row = this.customerRows
+      .filter({ hasText: `${firstName} ${lastName}` })
+      .first();
+
     const deleteButton = row.locator('button[ng-click="deleteCust(cust)"]');
+
     await deleteButton.click();
+    await expect(row).toHaveCount(0); 
   }
 
   async assertCustomerRowPresent(firstName, lastName) {
-    const row = this.customerRows.filter({ hasText: `${firstName} ${lastName}` });
+    const row = this.customerRows.filter({
+      hasText: `${firstName} ${lastName}`,
+    });
     await expect(row).toHaveCount(1);
+  }
+
+  async assertCustomerRowNotPresent(firstName, lastName) {
+    const row = this.customerRows.filter({
+      hasText: `${firstName} ${lastName}`,
+    });
+    await expect(row).toHaveCount(0);
   }
 
   async assertOnlyOneRowPresent() {
     await expect(this.customerRows).toHaveCount(1);
   }
 
-  async assertCustomerRowNotPresent(firstName, lastName) {
-    const row = this.customerRows.filter({ hasText: `${firstName} ${lastName}` });
-    await expect(row).toHaveCount(0);
+  async assertLastRowContains(text) {
+    const lastRow = this.customerRows.last();
+    await expect(lastRow).toContainText(text);
   }
 
-  async assertLastRowHasAccountNumber() {
+  async assertLastRowNoAccountNumber() {
     const lastRow = this.customerRows.last();
     const accountNumberCell = lastRow.locator('td:nth-child(4)');
-    await expect(accountNumberCell).not.toHaveText('');
+    await expect(accountNumberCell).toHaveText('');
   }
 }
+
 
