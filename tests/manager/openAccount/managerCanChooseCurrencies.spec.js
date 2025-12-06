@@ -1,13 +1,18 @@
 import { test } from '@playwright/test';
-import { ManagerOpenAccountPage } from '../../../src/pages/manager/ManagerOpenAccountPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
-  const openAccountPage = new ManagerOpenAccountPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+
   await openAccountPage.open();
+
   await openAccountPage.selectCurrency('Dollar');
   await openAccountPage.assertSelectedCurrency('Dollar');
+
   await openAccountPage.selectCurrency('Pound');
   await openAccountPage.assertSelectedCurrency('Pound');
+
   await openAccountPage.selectCurrency('Rupee');
   await openAccountPage.assertSelectedCurrency('Rupee');
 });
+
