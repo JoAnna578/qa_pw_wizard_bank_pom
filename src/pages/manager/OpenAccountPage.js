@@ -1,13 +1,12 @@
 import { expect } from '@playwright/test';
 
-export class ManagerOpenAccountPage {
+export class OpenAccountPage {
   constructor(page) {
     this.page = page;
 
     this.customerSelect = page.locator('#userSelect');
     this.currencySelect = page.locator('#currency');
     this.processButton = page.locator('button[type="submit"]');
-    this.alert = page.locator('.alert');
   }
 
   async open() {
@@ -23,11 +22,15 @@ export class ManagerOpenAccountPage {
   }
 
   async clickProcess() {
-    await this.processButton.click();
-  }
+    const dialogPromise = this.page.waitForEvent('dialog');
 
-  async assertAccountCreatedAlertVisible() {
-    await expect(this.alert).toBeVisible();
+    await this.processButton.click();
+
+    const dialog = await dialogPromise;
+    const message = dialog.message();
+    await dialog.accept();
+
+    return message; 
   }
 
   async reloadPage() {
@@ -38,4 +41,5 @@ export class ManagerOpenAccountPage {
     await expect(this.currencySelect).toHaveValue(currency);
   }
 }
+
 
