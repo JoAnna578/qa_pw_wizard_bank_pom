@@ -13,15 +13,24 @@ export class BankManagerMainPage {
   }
 
   async clickAddCustomer() {
-    await this.addCustomerButton.click();
+    await Promise.all([
+      this.page.waitForURL('**/addCust'),
+      this.addCustomerButton.click(),
+    ]);
   }
 
   async clickOpenAccount() {
-    await this.openAccountButton.click();
+    await Promise.all([
+      this.page.waitForURL('**/openAccount'),
+      this.openAccountButton.click(),
+    ]);
   }
 
   async clickCustomers() {
-    await this.customersButton.click();
+    await Promise.all([
+      this.page.waitForURL('**/list'),
+      this.customersButton.click(),
+    ]);
   }
 
   async assertAddCustomerButtonVisible() {
@@ -36,4 +45,5 @@ export class BankManagerMainPage {
     await expect(this.customersButton).toBeVisible();
   }
 }
+
 
